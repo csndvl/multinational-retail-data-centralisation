@@ -74,8 +74,26 @@ class DataCleaning():
         print ("card cleaning done\n")
         return df
     
-    def clean_store_details(self, df):
-        pass
+    def clean_store_data(self, df):
+        '''Cleans store details'''
+
+        # Resets index
+        df = df.reset_index(drop=True)
+      
+        # Convert column into correct data type
+        df['opening_date'] = pd.to_datetime(df['opening_date'], errors = 'coerce')
+        df['staff_numbers'] = pd.to_numeric(df['staff_numbers'], errors = 'coerce') #  Can use downcast='integer' to make it into integer and not float
+
+        # Removes null values. Started with 451
+        df = df.replace("NULL", np.NaN)
+        df = df.dropna(subset=['staff_numbers'], axis=0)
+
+        # Clean countinent
+        df['continent'] = df['continent'].str.replace('eeEurope', 'Europe')
+        df['continent'] = df['continent'].str.replace('eeAmerica', 'America')
+
+        print ("clean store details done\n")
+        return (df)
 
 
 
@@ -100,15 +118,18 @@ if __name__ == "__main__":
     # Retrieves and clean data
     user_data = data_ex.read_rds_table(engine, "legacy_users")
     clean_user_data = data_clean.clean_user_data(user_data)
-    number_of_stores = data_ex.list_number_of_stores(number_of_stores_endpoint, api_key)
-    store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
-
+    
     card_details = data_ex.retrieve_pdf_data()
     clean_card_details = data_clean.clean_card_data(card_details)
 
+    number_of_stores = data_ex.list_number_of_stores(number_of_stores_endpoint, api_key)
+    store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
+    clean_store = data_clean.clean_store_data(store_details)
+
     # Upload to local database
-    db_con.upload_to_db(clean_user_data, 'dim_user', local_creds) # Upload user data
-    db_con.upload_to_db(clean_card_details, 'dim_card_details', local_creds) # Upload card details
+    # db_con.upload_to_db(clean_user_data, 'dim_user', local_creds) # Upload user data
+    # db_con.upload_to_db(clean_card_details, 'dim_card_details', local_creds) # Upload card details
+    db_con.upload_to_db(clean_store, 'dim_store_details', local_creds) # Upload card details
 
    
 
