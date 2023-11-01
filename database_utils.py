@@ -24,11 +24,9 @@ class DatabaseConnector():
         #self.list_db_tables(engine) # Passes variable engine to list_db_tables function's parameter
         
 
-    def list_db_tables(self):
+    def list_db_tables(self,engine):
         '''Connects to AWS RDS and lists table names'''
-        engine = self.init_db_engine()
         connection = engine.connect() # Makes a connection to the database
-
         inspector = inspect(connection)
         print (inspector.get_table_names())
         # table_names = connection.execute(text("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';")) # Performs a SELECT query
