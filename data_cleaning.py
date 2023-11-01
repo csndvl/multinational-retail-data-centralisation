@@ -146,6 +146,15 @@ class DataCleaning():
         print ("conversion done\n")
 
         return (df)
+    
+    def clean_orders_data(self, df):
+        '''This function cleans the orders data'''
+
+        print("running clean order data")
+        df.drop(['level_0' , 'first_name', 'last_name', '1'], axis = 1, inplace = True)
+
+        print("done\n")
+        return (df)
    
 
 
@@ -179,15 +188,17 @@ if __name__ == "__main__":
     # store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
     # clean_store = data_clean.clean_store_data(store_details)
 
-    address = "s3://data-handling-public/products.csv"
-    product_data = data_ex.extract_from_s3(address)
-    clean_product = data_clean.clean_product_data(product_data)
+    # address = "s3://data-handling-public/products.csv"
+    # product_data = data_ex.extract_from_s3(address)
+    # clean_product = data_clean.clean_product_data(product_data)
 
+    order_data = data_ex.read_rds_table(engine, "orders_table")
+    clean_order_data = data_clean.clean_orders_data(order_data)
     
     # Upload to local database
     # db_con.upload_to_db(clean_user_data, 'dim_user', local_creds) # Upload user data
     # db_con.upload_to_db(clean_card_details, 'dim_card_details', local_creds) # Upload card details
     # db_con.upload_to_db(clean_store, 'dim_store_details', local_creds) # Upload card details
-    db_con.upload_to_db(clean_product, 'dim_product', local_creds) # Upload product details
-   
-
+    # db_con.upload_to_db(clean_product, 'dim_product', local_creds) # Upload product details
+    db_con.upload_to_db(clean_order_data, 'order_table', local_creds) # Upload order data
+    
