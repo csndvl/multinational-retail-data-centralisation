@@ -94,6 +94,59 @@ class DataCleaning():
 
         print ("clean store details done\n")
         return (df)
+    
+    def convert_product_weights(self, weight):
+        weight = weight.rstrip(". ") # Removes . and any trailing white spaces
+        def convert(weight):    
+            if "kg" in weight:
+                new_weight = float(weight.replace("kg", ""))
+            elif "g" in weight:
+                new_weight = float(weight.replace("g", ""))
+                new_weight = new_weight/1000
+            elif "ml" in weight:
+                new_weight = float(weight.replace("ml", ""))
+                new_weight = new_weight/1000
+            elif "lb" in weight:
+                new_weight = float(weight.replace("lb", ""))
+                new_weight = new_weight*0.453591
+            elif "oz" in weight:
+                new_weight = float(weight.replace("oz", ""))
+                new_weight = new_weight*0.0283495
+            return new_weight
+        
+        if "x" in weight:
+            var1, var2 = weight.split(" x ")
+            var2 = convert(var2)
+            new_weight = int(var1) * var2
+            return new_weight
+        else:
+            new_weight = convert(weight)
+            return new_weight
+        
+
+    def clean_product_data(self, df):
+        '''This function cleans the product data'''
+
+        print ("running clean_product_data")
+        # Convert date_added column into datetime
+        df['date_added'] = pd.to_datetime(df['date_added'], errors = 'coerce')
+        df = df.dropna(subset = ["date_added"])
+
+        # Removes null and reset index
+        df = df.reset_index(drop=True)
+        df = df.replace("Null", np.NaN)
+        df.drop(df.columns[0], axis=1, inplace=True) 
+        
+        # Cleans the weight column
+        new_weight = []
+        for weight in df['weight']:
+            correct_weight = self.convert_product_weights(weight)
+            new_weight.append(correct_weight)
+        df['weight'] = new_weight
+        print ("conversion done\n")
+
+        return (df)
+   
 
 
 
@@ -116,20 +169,25 @@ if __name__ == "__main__":
     local_creds = db_con.local_creds()
 
     # Retrieves and clean data
-    user_data = data_ex.read_rds_table(engine, "legacy_users")
-    clean_user_data = data_clean.clean_user_data(user_data)
+    # user_data = data_ex.read_rds_table(engine, "legacy_users")
+    # clean_user_data = data_clean.clean_user_data(user_data)
     
-    card_details = data_ex.retrieve_pdf_data()
-    clean_card_details = data_clean.clean_card_data(card_details)
+    # card_details = data_ex.retrieve_pdf_data()
+    # clean_card_details = data_clean.clean_card_data(card_details)
 
-    number_of_stores = data_ex.list_number_of_stores(number_of_stores_endpoint, api_key)
-    store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
-    clean_store = data_clean.clean_store_data(store_details)
+    # number_of_stores = data_ex.list_number_of_stores(number_of_stores_endpoint, api_key)
+    # store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
+    # clean_store = data_clean.clean_store_data(store_details)
 
+    address = "s3://data-handling-public/products.csv"
+    product_data = data_ex.extract_from_s3(address)
+    clean_product = data_clean.clean_product_data(product_data)
+
+    
     # Upload to local database
     # db_con.upload_to_db(clean_user_data, 'dim_user', local_creds) # Upload user data
     # db_con.upload_to_db(clean_card_details, 'dim_card_details', local_creds) # Upload card details
-    db_con.upload_to_db(clean_store, 'dim_store_details', local_creds) # Upload card details
-
+    # db_con.upload_to_db(clean_store, 'dim_store_details', local_creds) # Upload card details
+    db_con.upload_to_db(clean_product, 'dim_product', local_creds) # Upload product details
    
 
