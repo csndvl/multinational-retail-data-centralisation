@@ -52,22 +52,28 @@ class DataExtractor():
         '''The function extracts data from AWS s3'''
         print ("running extract from s3")
         client = boto3.client('s3') # Creates a s3 client
-        split_address = address.replace("s3://", "").split("/") # Splits the bucket name and file name
-        bucket_name = split_address[0]
+        if "s3://" in address:
+            split_address = address.replace("s3://", "").split("/", 1) # Splits the bucket name and file name
+
+        elif "https://" in address:
+            split_address = address.replace("https://", "").split("/", 1) # Splits the bucket name and file name
+
+        bucket_name = 'data-handling-public' # Set bucket name into data-handling-public
         s3key_path = "/".join(split_address[1:])
 
         data = client.get_object(Bucket = bucket_name, Key = s3key_path) # Retrieves products.csv
         data =  data['Body'].read()
-
-        df = pd.read_csv(BytesIO(data)) # Creates an in-memory buffer for the data retrieved from the S3 bucket and can be read by read_csv
+        
+        if 'csv' in s3key_path:
+            df = pd.read_csv(BytesIO(data)) # Creates an in-memory buffer for the data retrieved from the S3 bucket and can be read by read_csv
+        elif 'json' in s3key_path:
+            df = pd.read_json(BytesIO(data)) # Creates an in-memory buffer for the data retrieved from the S3 bucket and can be read by read_json
         print ("done")
         return (df)
-
     
+  
+
         
-
-
-        pass
        
       
 
