@@ -153,8 +153,22 @@ class DataCleaning():
         print("running clean order data")
         df.drop(['level_0' , 'first_name', 'last_name', '1'], axis = 1, inplace = True)
 
-        print("done\n")
+        print("cleaning orders data done\n")
         return (df)
+    
+    def clean_order_date(self,df):
+        '''This function cleans the orders date time data'''
+        
+        print("running clean_order_date")
+        # Convert month, year, and day columns in to numberic
+        df['month'] = pd.to_numeric(df['month'], errors = 'coerce')
+        df['year'] = pd.to_numeric(df['year'], errors = 'coerce')
+        df['day'] = pd.to_numeric(df['day'], errors = 'coerce')
+        df = df.dropna(subset = ['month', 'year', 'day'])
+
+        print ("cleaning order date done\n")
+        return (df)
+        
    
 
 
@@ -188,17 +202,23 @@ if __name__ == "__main__":
     # store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
     # clean_store = data_clean.clean_store_data(store_details)
 
-    # address = "s3://data-handling-public/products.csv"
-    # product_data = data_ex.extract_from_s3(address)
-    # clean_product = data_clean.clean_product_data(product_data)
+    # product_address = "s3://data-handling-public/products.csv"
+    order_time_address = "https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json"
 
-    order_data = data_ex.read_rds_table(engine, "orders_table")
-    clean_order_data = data_clean.clean_orders_data(order_data)
+    # product_data = data_ex.extract_from_s3(product_address)
+    # clean_product = data_clean.clean_product_data(product_data)
+    order_time_data = data_ex.extract_from_s3(order_time_address)
+    clean_order_time_data = data_clean.clean_order_date(order_time_data)
+
+    # order_data = data_ex.read_rds_table(engine, "orders_table")
+    # clean_order_data = data_clean.clean_orders_data(order_data)
     
     # Upload to local database
     # db_con.upload_to_db(clean_user_data, 'dim_user', local_creds) # Upload user data
     # db_con.upload_to_db(clean_card_details, 'dim_card_details', local_creds) # Upload card details
     # db_con.upload_to_db(clean_store, 'dim_store_details', local_creds) # Upload card details
     # db_con.upload_to_db(clean_product, 'dim_product', local_creds) # Upload product details
-    db_con.upload_to_db(clean_order_data, 'order_table', local_creds) # Upload order data
+    # db_con.upload_to_db(clean_order_data, 'order_table', local_creds) # Upload order data
+    db_con.upload_to_db(clean_order_time_data, 'dim_date_times', local_creds) # Upload order date times data
+
     
