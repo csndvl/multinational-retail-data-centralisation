@@ -26,7 +26,7 @@ ALTER COLUMN product_quantity TYPE SMALLINT;
 
 --TASK 2: Change dim user table into the correct data types
 
---Find the longest country code length
+-- Find the longest country code length
 SELECT MAX(LENGTH(country_code::text)) FROM dim_user
 SET LIMIT 1; --2
 
@@ -43,9 +43,14 @@ ALTER COLUMN join_date TYPE DATE;
 
 --TASK 3 Merge Lat columns and correct column data types
 
---Dropping unwanted column
+-- Merge and drop unwanted column
+UPDATE dim_store_details
+SET latitude = COALESCE(latitude || lat, latitude);
+
 ALTER TABLE dim_store_details
 DROP COLUMN lat;
+
+
 
 
 
