@@ -41,7 +41,7 @@ USING user_uuid::uuid,
 ALTER COLUMN join_date TYPE DATE;
 
 
---TASK 3 Merge Lat columns and correct column data types
+--TASK 3: Merge Lat columns and correct column data types
 
 -- Merge and drop unwanted column
 UPDATE dim_store_details
@@ -77,7 +77,7 @@ WHERE address = 'N/A';
 
 UPDATE dim_store_details
 SET locality = NULL
-WHERE locality = 'N/A'
+WHERE locality = 'N/A';
 
 -- Alter column data types
 ALTER TABLE dim_store_details
@@ -93,6 +93,26 @@ USING longitude::FLOAT,
 ALTER COLUMN latitude TYPE FLOAT
 USING latitude::FLOAT;
 
+
+--TASK 4: Remove £ sign and add a new column
+
+-- Removing £ sign in product_price
+UPDATE dim_product
+SET product_price = REPLACE(product_price, '£', '');
+
+-- Adding a weight_class column
+ALTER TABLE dim_product
+ADD weight_class VARCHAR(14);
+
+-- Categorized weight class based on weight
+UPDATE dim_product
+SET weight_class = CASE
+WHEN weight < 2 then 'Light'
+WHEN weight >= 2 AND weight < 40 then 'Mid_Sized'
+WHEN weight >= 40 AND weight < 140 then 'Heavy'
+WHEN weight >= 140 then 'Truck_Required'
+ELSE NULL
+END;
 
 
 
