@@ -50,6 +50,17 @@ SET latitude = COALESCE(latitude || lat, latitude);
 ALTER TABLE dim_store_details
 DROP COLUMN lat;
 
+-- Used to find columns with NULL VALUES
+SELECT * FROM dim_store_details
+WHERE address IS NULL;
+
+-- Updates NULL values into N/A
+UPDATE dim_store_details
+SET latitude = 'N/A'
+WHERE latitude IS NULL;
+
+
+
 
 
 
