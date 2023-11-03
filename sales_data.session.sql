@@ -192,3 +192,20 @@ ALTER COLUMN expiry_date TYPE VARCHAR(5),
 ALTER COLUMN date_payment_confirmed TYPE DATE;
 
 
+--TASK 8: Create primary key in dim tables
+ALTER TABLE dim_date_times
+ADD PRIMARY KEY (date_uuid);
+
+ALTER TABLE dim_user
+ADD PRIMARY KEY (user_uuid);
+
+ALTER TABLE dim_card_details
+ADD PRIMARY KEY (card_number);
+
+ALTER TABLE dim_store_details
+ADD PRIMARY KEY (store_code);
+
+ALTER TABLE dim_product
+ADD PRIMARY KEY (product_code);
+
+
