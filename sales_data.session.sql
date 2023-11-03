@@ -50,14 +50,39 @@ SET latitude = COALESCE(latitude || lat, latitude);
 ALTER TABLE dim_store_details
 DROP COLUMN lat;
 
--- Used to find columns with NULL VALUES
-SELECT * FROM dim_store_details
-WHERE address IS NULL;
+-- Find the longest store code length
+SELECT MAX(LENGTH(store_code::TEXT)) FROM dim_store_details
+SET LIMIT 1; --12
 
--- Updates NULL values into N/A
+-- Find the longest country code length
+SELECT MAX(LENGTH(country_code::TEXT)) FROM dim_store_details
+SET LIMIT 1; --2
+
+-- Used to find columns with N/A VALUES
+SELECT * FROM dim_store_details
+WHERE address = 'N/A';
+
+-- Updates N/A values into NULL
 UPDATE dim_store_details
-SET latitude = 'N/A'
-WHERE latitude IS NULL;
+SET latitude = NULL
+WHERE latitude = 'N/A';
+
+UPDATE dim_store_details
+SET longitude = NULL
+WHERE longitude = 'N/A';
+
+UPDATE dim_store_details
+SET address = NULL
+WHERE address = 'N/A';
+
+UPDATE dim_store_details
+SET locality = NULL
+WHERE locality = 'N/A'
+
+
+
+
+
 
 
 
