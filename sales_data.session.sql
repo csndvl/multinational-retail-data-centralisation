@@ -41,6 +41,13 @@ USING user_uuid::uuid,
 ALTER COLUMN join_date TYPE DATE;
 
 
+--TASK 3 Merge Lat columns and correct column data types
+
+--Dropping unwanted column
+ALTER TABLE dim_store_details
+DROP COLUMN lat;
+
+
 
 
 
