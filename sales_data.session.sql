@@ -24,7 +24,7 @@ ALTER COLUMN product_code TYPE VARCHAR(11),
 ALTER COLUMN product_quantity TYPE SMALLINT;
 
 
---TASK 2: Change dim user table into the correct data types
+--TASK 2: Change dim user table columns into the correct data types
 
 -- Find the longest country code length
 SELECT MAX(LENGTH(country_code::text)) FROM dim_user
@@ -41,7 +41,7 @@ USING user_uuid::uuid,
 ALTER COLUMN join_date TYPE DATE;
 
 
---TASK 3: Merge Lat columns and correct column data types
+--TASK 3: Merge Lat columns and change dim store details table columns into the correct data types
 
 -- Merge and drop unwanted column
 UPDATE dim_store_details
@@ -115,12 +115,36 @@ ELSE NULL
 END;
 
 
+--TASK 5: Change dim product table columns into the correct data types
 
+-- Rename removed column into still_available
+ALTER TABLE dim_product
+RENAME COLUMN removed TO still_available;
 
+-- Find the longest product code length
+SELECT MAX(LENGTH(product_code)) FROM dim_product
+SET LIMIT 1; --11
 
+-- Find the longest EAN length
+SELECT MAX(LENGTH("EAN")) FROM dim_product
+SET LIMIT 1; --17
 
-
-
+-- Alter column data types
+ALTER TABLE dim_product
+ALTER COLUMN product_price TYPE FLOAT
+USING product_price::FLOAT,
+ALTER COLUMN weight TYPE FLOAT,
+ALTER COLUMN "EAN" TYPE VARCHAR(17),
+ALTER COLUMN product_code TYPE VARCHAR(11),
+ALTER COLUMN date_added TYPE DATE,
+ALTER COLUMN uuid TYPE UUID
+USING uuid::uuid,
+ALTER COLUMN still_available TYPE BOOLEAN
+USING CASE still_available
+WHEN 'Still_avaliable' THEN TRUE 
+WHEN 'Removed' THEN FALSE
+ELSE NULL
+END;
 
 
 
