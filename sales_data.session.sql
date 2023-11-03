@@ -175,5 +175,20 @@ ALTER COLUMN date_uuid TYPE UUID
 USING date_uuid::uuid;
 
 
+--TASK 7: Change dim card details table column into the correct data types
+
+-- Find the longest card_number length
+SELECT MAX(LENGTH(card_number)) FROM dim_card_details
+SET LIMIT 1; --19
+
+-- Find the longest expiry_date length
+SELECT MAX(LENGTH(expiry_date)) FROM dim_card_details
+SET LIMIT 1; --5
+
+-- Alter column data types
+ALTER TABLE dim_card_details
+ALTER COLUMN card_number TYPE VARCHAR(19),
+ALTER COLUMN expiry_date TYPE VARCHAR(5),
+ALTER COLUMN date_payment_confirmed TYPE DATE;
 
 
