@@ -147,6 +147,32 @@ ELSE NULL
 END;
 
 
+--TASK 6: Change dim date time table columns into the correct data types
+
+-- Find the longest month length
+SELECT MAX(LENGTH(month::TEXT)) FROM dim_date_times
+SET LIMIT 1; --2
+
+-- Find the longest year length
+SELECT MAX(LENGTH(year::TEXT)) FROM dim_date_times
+SET LIMIT 1; --4
+
+-- Find the longest day length
+SELECT MAX(LENGTH(day::TEXT)) FROM dim_date_times
+SET LIMIT 1; --2
+
+-- Find the longest time_period length
+SELECT MAX(LENGTH(time_period::TEXT)) FROM dim_date_times
+SET LIMIT 1; --10
+
+-- Alter column data types
+ALTER TABLE dim_date_times
+ALTER COLUMN month TYPE VARCHAR(2),
+ALTER COLUMN year TYPE VARCHAR(4),
+ALTER COLUMN day TYPE VARCHAR(2),
+ALTER COLUMN time_period TYPE VARCHAR(10),
+ALTER COLUMN date_uuid TYPE UUID
+USING date_uuid::uuid;
 
 
 
