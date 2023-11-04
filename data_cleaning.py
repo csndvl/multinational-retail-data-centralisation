@@ -9,27 +9,56 @@ class DataCleaning():
 
     def clean_user_data(self, df):
         '''Cleans the legacy_user table'''
-
+        
         # Remove null values
         df = df.replace("NULL", np.NaN)
-        df = df.dropna() 
-        df = df.drop_duplicates(subset = ['phone_number', 'email_address']) # ASK ABOUT THE SUBSET
-
+        df = df.dropna(subset=['user_uuid'])#subset=['user_uuid'], how='any', axis=0) 
+        df = df.drop_duplicates(subset = ['phone_number', 'email_address']) # ASK ABOUT THE SUBSET         
+        
         # First_name and Last_name cleaning
         df['first_name'] = df['first_name'].str.title()
         df['last_name'] = df['last_name'].str.title()
-        # Can add special character cleaning
-
+       
         # Converts date_of_birth and join_date column into a datetime data type and any invalid data into Not a Time (NaT)
-        df['date_of_birth'] = pd.to_datetime(df['date_of_birth'], errors = 'coerce') 
-        df['join_date'] = pd.to_datetime(df['join_date'], errors = 'coerce') 
-        df = df.dropna(subset = ['date_of_birth', 'join_date']) # Drops all null values in date_of_birth and join_date column
+        df['date_of_birth'] = pd.to_datetime(df['date_of_birth'], errors = 'ignore') 
 
+        row_to_update = df[df['join_date'] == 'February 2019 03'].index[0]
+        df.at[row_to_update, 'join_date'] = '2019 February 03'
+        row_to_update = df[df['join_date'] == 'May 1994 27'].index[0]
+        df.at[row_to_update, 'join_date'] = '1994 May 27'
+        row_to_update = df[df['join_date'] == 'May 1999 31'].index[0]
+        df.at[row_to_update, 'join_date'] = '1999 May 31'
+        row_to_update = df[df['join_date'] == 'November 1994 28'].index[0]
+        df.at[row_to_update, 'join_date'] = '1994 November 28'
+        row_to_update = df[df['join_date'] == 'March 2011 04'].index[0]
+        df.at[row_to_update, 'join_date'] = '2011 March 04'
+        row_to_update = df[df['join_date'] == 'July 2002 21'].index[0]
+        df.at[row_to_update, 'join_date'] = '2002 July 21'
+        row_to_update = df[df['join_date'] == 'October 2022 26'].index[0]
+        df.at[row_to_update, 'join_date'] = '2022 October 26'
+        row_to_update = df[df['join_date'] == 'December 1992 09'].index[0]
+        df.at[row_to_update, 'join_date'] = '1992 December 09'
+
+        df['join_date'] = df['join_date'].str.replace('/', '-')
+        df['join_date'] = df['join_date'].str.replace('February', '2')
+        df['join_date'] = df['join_date'].str.replace('March', '3')
+        df['join_date'] = df['join_date'].str.replace('May', '5')
+        df['join_date'] = df['join_date'].str.replace('June', '6')
+        df['join_date'] = df['join_date'].str.replace('July', '7')
+        df['join_date'] = df['join_date'].str.replace('September', '9')
+        df['join_date'] = df['join_date'].str.replace('October', '10')
+        df['join_date'] = df['join_date'].str.replace('November', '11')
+        df['join_date'] = df['join_date'].str.replace('December', '12')
+        df['join_date'] = df['join_date'].str.replace(' ', '-')
+        #df['join_date'] = pd.to_datetime(df['join_date'], format="%Y-%B-%d", errors = 'ignore')
+
+        df['join_date'] = pd.to_datetime(df['join_date'], errors = 'coerce') 
+        df.dropna(subset = ['join_date'], inplace=True) # Drops all null values in join_date column
+        
         # Company column cleaning
         df['company'] = df['company'].str.title()
 
         # Email column cleaning
-        
 
         # Address column cleaning
         df['address'] = df['address'].str.title()
@@ -51,8 +80,7 @@ class DataCleaning():
         df['index'] = range(1, len(df) + 1)
 
         print("user cleaning done\n")
-        return (df) 
-    
+        return (df)
 
     def clean_card_data(self, df):
         '''Cleans card details'''
@@ -188,7 +216,7 @@ if __name__ == "__main__":
     # User Data
     user_data = data_ex.read_rds_table(engine, "legacy_users")
     clean_user_data = data_clean.clean_user_data(user_data)
-    
+
     # Card Details
     card_details = data_ex.retrieve_pdf_data()
     clean_card_details = data_clean.clean_card_data(card_details)
