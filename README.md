@@ -58,9 +58,39 @@ Goals: To extract all the data from the multitude of data sources, clean it, and
          df["date_payment_confirmed"] = pd.to_datetime(df["date_payment_confirmed"], errors = 'coerce')
          df = df.dropna()
          ```
-   
-  
-    
+    4. Store Details
+       - Changed "NULL" strings into NULL values
+       - Removed non-digit in staff_number columns
+       - Converted opening_date column into a datetime data type
+       - Removed NULL values
+         ```
+         df = df.replace("NULL", np.NaN)
+         df['staff_numbers'] = df['staff_numbers'].str.replace(r"(\D)", "", regex = True)
+         df['opening_date'] = pd.to_datetime(df['opening_date'], errors = 'coerce')
+         df = df.dropna()
+         ```
+    5. Product Details
+       - Changed "NULL" strings into NULL values
+       - Turned all weight into kg units
+       - Removed NULL values
+         ```
+         df = df.replace("NULL", np.NaN)
+         new_weight = []
+         for weight in df['weight']:
+            correct_weight = self.convert_product_weights(weight)
+            new_weight.append(correct_weight)
+         df['weight'] = new_weight
+         df = df.dropna()
+         ```
+    6. Order Time Data
+       - Changed columns into numeric data type
+       - Dropped NULL values in month, year, and day column
+         ```
+         df['month'] = pd.to_numeric(df['month'], errors = 'coerce')
+         df['year'] = pd.to_numeric(df['year'], errors = 'coerce')
+         df['day'] = pd.to_numeric(df['day'], errors = 'coerce')
+         df = df.dropna(subset = ['month', 'year', 'day'])
+         ```
 
 
 ## Milestore 3 - Creating Database Schema
