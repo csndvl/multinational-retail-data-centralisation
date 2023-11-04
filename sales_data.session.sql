@@ -229,6 +229,9 @@ ALTER TABLE order_table
 ADD FOREIGN KEY (product_code)
 REFERENCES dim_product (product_code);
 
+ALTER TABLE order_table
+ADD FOREIGN KEY (card_number)
+REFERENCES dim_card_details (card_number)
 
 
 
