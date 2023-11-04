@@ -110,15 +110,17 @@ class DataCleaning():
       
         # Convert column into correct data type
         df['opening_date'] = pd.to_datetime(df['opening_date'], errors = 'coerce')
-        df['staff_numbers'] = pd.to_numeric(df['staff_numbers'], errors = 'coerce') #  Can use downcast='integer' to make it into integer and not float
+        df['staff_numbers'] = df['staff_numbers'].str.replace(r"(\D)", "", regex = True) # Removes all non-digit
+        df['staff_numbers'] = pd.to_numeric(df['staff_numbers'], errors = 'coerce', downcast='integer') 
 
         # Removes null values. Started with 451
         df = df.replace("NULL", np.NaN)
         df = df.dropna(subset=['staff_numbers'], axis=0)
 
-        # Clean countinent
+        # Clean countinent and country code
         df['continent'] = df['continent'].str.replace('eeEurope', 'Europe')
         df['continent'] = df['continent'].str.replace('eeAmerica', 'America')
+        df = df[df['country_code'].str.len() <= 2]
 
         print ("clean store details done\n")
         return (df)
@@ -252,5 +254,5 @@ if __name__ == "__main__":
     db_con.upload_to_db(clean_product, 'dim_product', local_creds) # Upload product details
     db_con.upload_to_db(clean_order_data, 'order_table', local_creds) # Upload order data
     db_con.upload_to_db(clean_order_time_data, 'dim_date_times', local_creds) # Upload order date times data
-
+    
     
