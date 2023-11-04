@@ -19,16 +19,17 @@ Your first goal will be to produce a system that stores the current company data
 Goals: To extract all the data from the multitude of data sources, clean it, and then store it in a local database.
   
   - Data were extracted from multiples sources:
-      I. RDS Tables
-         - Order Table
-         - Legacy User
-      II. PDFs
-          - Card Details
-      III. APIs
-          - Store Detials
-      IV. AWS S3 Buckets
-          - Product Details
-          - Order Time Data
+      1. RDS Tables
+         - Order Table (extracted by creating a connection with AWS RDS using its own credentials)
+         - Legacy User (extracted by creating a connection with AWS RDS using its own credentials)
+      2. PDFs
+          - Card Details (extracted with the use of tabula library to read pdf files)
+      3. APIs
+          - Store Detials (extracted using API Get Request with their specific endpoints)
+      4. AWS S3 Buckets
+          - Product Details (extracted using AWS s3 address to get bucket name and file name)
+          - Order Time Data (extracted using AWS s3 address to get bucket name and file name)
+  - 
 
 
 # Milestore 3 - Creating Database Schema
