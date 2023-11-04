@@ -156,9 +156,13 @@ class DataCleaning():
 
     def clean_product_data(self, df):
         '''This function cleans the product data'''
-
+        
         print ("running clean_product_data")
         # Convert date_added column into datetime
+        row_to_update = df[df['date_added'] == 'September 2017 06'].index[0]
+        df.at[row_to_update, 'date_added'] = '2017 9 06'
+        df['date_added'] = df['date_added'].str.replace("October", '10')
+        df['date_added'] = df['date_added'].str.replace(' ', '-')
         df['date_added'] = pd.to_datetime(df['date_added'], errors = 'coerce')
         df = df.dropna(subset = ["date_added"])
 
@@ -173,7 +177,7 @@ class DataCleaning():
             correct_weight = self.convert_product_weights(weight)
             new_weight.append(correct_weight)
         df['weight'] = new_weight
-        print ("conversion done\n")
+        print ("clean product data done\n")
 
         return (df)
     
