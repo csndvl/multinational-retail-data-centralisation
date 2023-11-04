@@ -84,20 +84,20 @@ class DataCleaning():
 
     def clean_card_data(self, df):
         '''Cleans card details'''
-
+        
         # Remove null values. started with 15309
         df = df.replace("NULL", np.NaN)
-        df = df.dropna()
         df = df.drop_duplicates(subset = ['card_number'])
-
+        df = df.dropna()
+        
         # Cleans card number
-        df['card_number'] = df['card_number'].apply(str)
+        df['card_number'] = df['card_number'].apply(str) # Converts it into a string
         df['card_number'] = df['card_number'].str.replace('?','')
+        df = df[~df['card_number'].str.contains(r'[a-zA-Z]')] # Drops rows with letters
         
         #Converts expiry_date and date_payment_confirmed column into a datetime data type
         df["date_payment_confirmed"] = pd.to_datetime(df["date_payment_confirmed"], errors = 'coerce')
         #df["expiry_date"] = pd.to_datetime(df["expiry_date"], format = '%m%Y' ,errors = 'coerce')
-        df = df.dropna(subset = ['date_payment_confirmed']) 
 
         print ("card cleaning done\n")
         return df
