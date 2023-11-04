@@ -36,6 +36,30 @@ Goals: To extract all the data from the multitude of data sources, clean it, and
          ```
          df.drop([column_name], axis = 1, inplace = True)
          ```
+    2. Legacy User
+       - Changed "NULL" strings into NULL values
+       - Converted join_date column into a datetime data type
+       - Removed NULL values
+         ```
+         df = df.replace("NULL", np.NaN)
+         df['join_date'] = pd.to_datetime(df['join_date'], errors = 'coerce')
+         df = df.dropna()
+         ```
+    3. Card Details
+       - Changed "NULL" strings into NULL values
+       - Removed duplicate card numbers
+       - Removed card numbers with letters
+       - Converted date_payment_confirmed column into a datetime data type
+       - Removed NULL values
+         ```
+         df = df.replace("NULL", np.NaN)
+         df = df.drop_duplicates(subset = ['card_number'])
+         df = df[~df['card_number'].str.contains(r'[a-zA-Z]')]
+         df["date_payment_confirmed"] = pd.to_datetime(df["date_payment_confirmed"], errors = 'coerce')
+         df = df.dropna()
+         ```
+   
+  
     
 
 
