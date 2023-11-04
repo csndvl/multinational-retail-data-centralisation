@@ -221,6 +221,10 @@ ALTER TABLE order_table
 ADD FOREIGN KEY (user_uuid)
 REFERENCES dim_user (user_uuid); 
 
+ALTER TABLE order_table
+ADD FOREIGN KEY (store_code)
+REFERENCES dim_store_details (store_code);
+
 
 
 
