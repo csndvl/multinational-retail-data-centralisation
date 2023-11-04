@@ -18,7 +18,7 @@ Your first goal will be to produce a system that stores the current company data
 # Milestone 2 - Data Extraction and Data Cleaning
 Goals: To extract all the data from the multitude of data sources, clean it, and then store it in a local database.
   
-  -- Data were extracted from multiples sources:
+  - Data were extracted from multiples sources:
       1. RDS Tables
          - Order Table
          - Legacy User
