@@ -16,5 +16,20 @@ Your first goal will be to produce a system that stores the current company data
 
 
 # Milestone 2 - Data Extraction and Data Cleaning
-Goals: To extract all the data from the multitude of data sources, clean it, and then store it in a local database
-  - Data were extracted from multiples sources (RDS Tables, PDFs, APIs, and AWS S3 Buckets)
+Goals: To extract all the data from the multitude of data sources, clean it, and then store it in a local database.
+  
+  -- Data were extracted from multiples sources:
+      1. RDS Tables
+         - Order Table
+         - Legacy User
+      2. PDFs
+          - Card Details
+      3. APIs
+          - Store Detials
+      4. AWS S3 Buckets
+          - Product Details
+          - Order Time Data
+
+
+# Milestore 3 - Creating Database Schema
+Goals: Develop the star-based schema of the database, ensuring that the columns are of the correct data types.
