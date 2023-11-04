@@ -34,12 +34,15 @@ SET LIMIT 1; --2
 ALTER TABLE dim_user
 ALTER COLUMN first_name TYPE VARCHAR(255),
 ALTER COLUMN last_name TYPE VARCHAR(255),
-ALTER COLUMN date_of_birth TYPE DATE,
-ALTER COLUMN country_code TYPE VARCHAR(2),
+ALTER COLUMN date_of_birth TYPE DATE
+USING date_of_birth::DATE,
+ALTER COLUMN country_code TYPE VARCHAR(3),
 ALTER COLUMN user_uuid TYPE UUID
 USING user_uuid::uuid,
 ALTER COLUMN join_date TYPE DATE;
 
+ALTER TABLE dim_user
+ALTER COLUMN user_uuid TYPE TEXT;
 
 --TASK 3: Merge Lat columns and change dim store details table columns into the correct data types
 
@@ -207,5 +210,18 @@ ADD PRIMARY KEY (store_code);
 
 ALTER TABLE dim_product
 ADD PRIMARY KEY (product_code);
+
+
+--TASK 9: Creating foreign key
+ALTER TABLE order_table
+ADD FOREIGN KEY (date_uuid)
+REFERENCES dim_date_times (date_uuid);
+
+ALTER TABLE order_table
+ADD FOREIGN KEY (user_uuid)
+REFERENCES dim_user (user_uuid); 
+
+
+
 
 
