@@ -19,14 +19,14 @@ Your first goal will be to produce a system that stores the current company data
 Goals: To extract all the data from the multitude of data sources, clean it, and then store it in a local database.
   
   - Data were extracted from multiples sources:
-      1. RDS Tables
+      I. RDS Tables
          - Order Table
          - Legacy User
-      2. PDFs
+      II. PDFs
           - Card Details
-      3. APIs
+      III. APIs
           - Store Detials
-      4. AWS S3 Buckets
+      IV. AWS S3 Buckets
           - Product Details
           - Order Time Data
 
