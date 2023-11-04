@@ -225,6 +225,9 @@ ALTER TABLE order_table
 ADD FOREIGN KEY (store_code)
 REFERENCES dim_store_details (store_code);
 
+ALTER TABLE order_table
+ADD FOREIGN KEY (product_code)
+REFERENCES dim_product (product_code);
 
 
 
