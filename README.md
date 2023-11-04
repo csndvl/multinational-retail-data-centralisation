@@ -6,12 +6,15 @@ Scenario: You work for a multinational company that sells various goods across t
 
 Your first goal will be to produce a system that stores the current company data in a database so that it's accessed from one centralised location and acts as a single source of truth for sales data. You will then query the database to get up-to-date metrics for the business
 
-# Milestone 2 - Data Extraction and Data Cleaning
-  - Data were extracted from multiples sources (RDS Tables, PDFs, APIs, and AWS S3 Buckets)
 
 # Project Utils
   1. Data extraction. In "data_extraction.py" we store methods responsible for retrieving data from different sources         into pandas data frame.
   2. Data cleaning. In "data_cleaning.py" we develop the class DataCleaning that clean different tables, which we 
      retrived from "data_extraction.py".
   3. Uploading data into the database. We write DatabaseConnector class "database_utils.py", which initiates the       
-     database engine based on credentials provided in ".yml" file. 
+     database engine based on credentials provided in ".yml" file.
+
+
+# Milestone 2 - Data Extraction and Data Cleaning
+Goals: To extract all the data from the multitude of data sources, clean it, and then store it in a local database
+  - Data were extracted from multiples sources (RDS Tables, PDFs, APIs, and AWS S3 Buckets)
