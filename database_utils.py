@@ -1,25 +1,36 @@
 import yaml
 from sqlalchemy import create_engine, text, inspect
+from dotenv import load_dotenv
+import os
 
 
 class DatabaseConnector():
     '''This function reads databases credentials, initialise engines, list table names, and upload clean data into local database'''
 
-    def read_db_creds(self):
-        '''Reads the AWS Database Credentials'''
-        with open("db_creds.yaml", 'r') as f:
-            db_creds = yaml.safe_load(f)
-            return db_creds
-    
+    def __init__(self):
+        load_dotenv('.env')
+        self.RDS_HOST = os.getenv('RDS_HOST')
+        self.RDS_PASSWORD = os.getenv('RDS_PASSWORD')
+        self.RDS_USER = os.getenv('RDS_USER')
+        self.RDS_DATABASE = os.getenv('RDS_DATABASE')
+        self.RDS_PORT = os.getenv('RDS_PORT')
+
+    # def read_db_creds(self):
+    #     '''Reads the AWS Database Credentials'''
+    #     with open("db_creds.yaml", 'r') as f:
+    #         db_creds = yaml.safe_load(f)
+    #         return (db_creds)
+            
     def local_creds(self):
         '''Reads the Local Database Credentials'''
         with open("local_db_creds.yaml", 'r') as f:
             local_db_creds = yaml.safe_load(f)
             return local_db_creds
              
-    def init_db_engine(self, aws_creds):
+    def init_db_engine(self):
         '''Creates an instance of the Engine Class'''
-        db_url = f'postgresql://{aws_creds["RDS_USER"]}:{aws_creds["RDS_PASSWORD"]}@{aws_creds["RDS_HOST"]}:{aws_creds["RDS_PORT"]}/{aws_creds["RDS_DATABASE"]}'
+        #db_url = f'postgresql://{aws_creds["RDS_USER"]}:{aws_creds["RDS_PASSWORD"]}@{aws_creds["RDS_HOST"]}:{aws_creds["RDS_PORT"]}/{aws_creds["RDS_DATABASE"]}'
+        db_url = f'postgresql://{self.RDS_USER}:{self.RDS_PASSWORD}@{self.RDS_HOST}:{self.RDS_PORT}/{self.RDS_DATABASE}'
         engine = create_engine(db_url) # Creates an instance of the sqlalchemy Engine class
         return engine
         
