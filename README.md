@@ -9,10 +9,8 @@ Your first goal will be to produce a system that stores the current company data
 
 ## Project Utils
   1. Data extraction. In "data_extraction.py", we store methods responsible for retrieving data from different sources into pandas data frame.
-  2. Data cleaning. In "data_cleaning.py", we develop the class DataCleaning that clean different tables, which we 
-     retrived from "data_extraction.py".
-  3. Uploading data into the database. We write DatabaseConnector class "database_utils.py", which initiates the       
-     database engine based on credentials provided in ".yml" file.
+  2. Data cleaning. In "data_cleaning.py", we develop the class DataCleaning that clean different tables, which we retrived from "data_extraction.py".
+  3. Uploading data into the database. We write DatabaseConnector class "database_utils.py", which initiates the database engine based on credentials provided in ".yml" file.
   4. Database wrangling is performed inside "database_wrangling.sql". This is where all the columns are converted into its correct data types, all the dim tables are given primary key, and also where foreign keys are added into order table
   5. Data queries are performed inside "scenario_queries.sql"
 
