@@ -105,3 +105,86 @@ Goals: To extract all the data from the multitude of data sources, clean it, and
 
 ## Milestore 3 - Creating Database Schema
 Goals: Develop the star-based schema of the database, ensuring that the columns are of the correct data types.
+- Tables were updated to ensure that data were stored in the correct data types. To dedtermine the maximum number of characters for the VARCHAR(?) data type, a query was performed, before the output was used in the VARCHAR data type.
+```
+  -- Find the longest card number length
+SELECT MAX(LENGTH(card_number::TEXT)) FROM order_table
+SET LIMIT 1; --19
+
+-- Find the longest store code length
+SELECT MAX(LENGTH(store_code::TEXT)) FROM order_table
+SET LIMIT 1; --12
+
+-- Find the longest product code length
+SELECT MAX(LENGTH(product_code::TEXT)) FROM order_table
+SET LIMIT 1; --11
+
+-- Alter column data types
+ALTER TABLE order_table
+ALTER COLUMN date_uuid TYPE UUID
+USING date_uuid::uuid,
+ALTER COLUMN user_uuid TYPE UUID
+USING user_uuid::uuid,
+ALTER COLUMN card_number TYPE VARCHAR(19),
+ALTER COLUMN store_code TYPE VARCHAR(12),
+ALTER COLUMN product_code TYPE VARCHAR(11),
+ALTER COLUMN product_quantity TYPE SMALLINT;
+```
+- The use of case statement was introduced to improve readability in dim_product table
+  ```
+  UPDATE dim_product
+  SET weight_class = CASE
+  WHEN weight < 2 then 'Light'
+  WHEN weight >= 2 AND weight < 40 then 'Mid_Sized'
+  WHEN weight >= 40 AND weight < 140 then 'Heavy'
+  WHEN weight >= 140 then 'Truck_Required'
+  ELSE NULL
+  END;
+  ```
+- Primary keys are added in the dim tables
+  ```
+  ALTER TABLE dim_date_times
+  ADD PRIMARY KEY (date_uuid);
+  
+  ALTER TABLE dim_user
+  ADD PRIMARY KEY (user_uuid);
+  
+  ALTER TABLE dim_card_details
+  ADD PRIMARY KEY (card_number);
+  
+  ALTER TABLE dim_store_details
+  ADD PRIMARY KEY (store_code);
+  
+  ALTER TABLE dim_product
+  ADD PRIMARY KEY (product_code);
+  ```
+- Foreign keys are added to link tables
+  ```
+  ALTER TABLE order_table
+  ADD FOREIGN KEY (date_uuid)
+  REFERENCES dim_date_times (date_uuid);
+  
+  ALTER TABLE order_table
+  ADD FOREIGN KEY (user_uuid)
+  REFERENCES dim_user (user_uuid); 
+  
+  ALTER TABLE order_table
+  ADD FOREIGN KEY (store_code)
+  REFERENCES dim_store_details (store_code);
+  
+  ALTER TABLE order_table
+  ADD FOREIGN KEY (product_code)
+  REFERENCES dim_product (product_code);
+  
+  ALTER TABLE order_table
+  ADD FOREIGN KEY (card_number)
+  REFERENCES dim_card_details (card_number)
+  ```
+- Data cleaning was required to ensure the foreign and primary keys matched. The code below was used to see the difference between order_table and dim_user table
+  ```
+  SELECT distinct(order_table.user_uuid)
+  FROM order_table
+  LEFT JOIN dim_user
+  ON order_table.user_uuid = dim_user.user_uuid
+  WHERE dim_user.user_uuid IS NULL'''
+  ```
