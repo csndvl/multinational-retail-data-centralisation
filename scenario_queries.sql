@@ -80,3 +80,14 @@ ORDER BY total_staff_numbers DESC;
 
 
 --TASK 8: Which German store type is selling the most?
+
+SELECT ROUND(SUM(dim_product.product_price * order_table.product_quantity)::NUMERIC ,2) as total_sales,
+dim_store_details.store_type, dim_store_details.country_code
+FROM dim_product
+JOIN order_table
+ON order_table.product_code = dim_product.product_code
+JOIN dim_store_details
+ON dim_store_details.store_code = order_table.store_code
+WHERE country_code = 'DE'
+GROUP BY dim_store_details.store_type, dim_store_details.country_code
+ORDER BY total_sales;
