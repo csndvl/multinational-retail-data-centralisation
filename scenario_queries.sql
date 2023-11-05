@@ -69,3 +69,14 @@ ON dim_date_times.date_uuid = order_table.date_uuid
 GROUP BY dim_date_times.year, dim_date_times.month
 ORDER BY total_sales DESC
 LIMIT 10;
+
+
+--TASK 7: What is our staff headcount?
+
+SELECT SUM(staff_numbers) as total_staff_numbers, country_code
+FROM dim_store_details
+GROUP BY country_code
+ORDER BY total_staff_numbers DESC;
+
+
+--TASK 8: Which German store type is selling the most?
