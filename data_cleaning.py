@@ -241,19 +241,18 @@ if __name__ == "__main__":
     # clean_store = data_clean.clean_store_data(store_details)
 
     # # Product Details
-    product_address = os.getenv('product_address')
-    product_data = data_ex.extract_from_s3(product_address)
-    clean_product = data_clean.clean_product_data(product_data)
-    
+    # product_address = os.getenv('product_address')
+    # product_data = data_ex.extract_from_s3(product_address)
+    # clean_product = data_clean.clean_product_data(product_data)    
 
     # # Order Data
     # order_data = data_ex.read_rds_table(engine, "orders_table")
     # clean_order_data = data_clean.clean_orders_data(order_data)
 
     # # Order Time Data
-    # order_time_address = "https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json"
-    # order_time_data = data_ex.extract_from_s3(order_time_address)
-    # clean_order_time_data = data_clean.clean_order_date(order_time_data)
+    order_time_address = os.getenv('order_time_address')
+    order_time_data = data_ex.extract_from_s3(order_time_address)
+    clean_order_time_data = data_clean.clean_order_date(order_time_data)
     
     # # UPLOAD TO LOCAL DATABASE
     # db_con.upload_to_db(clean_user_data, 'dim_user', local_creds) # Upload user data
