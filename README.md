@@ -91,6 +91,16 @@ Goals: To extract all the data from the multitude of data sources, clean it, and
          df['day'] = pd.to_numeric(df['day'], errors = 'coerce')
          df = df.dropna(subset = ['month', 'year', 'day'])
          ```
+         
+  - Data are uploaded in local postgres database
+    1. Made a connection using local credentials
+    2. Uploaded each clean data into their perspective table name
+       - Order Table > order_table
+       - Legacy User > dim_user
+       - Card Details > dim_card_details
+       - Store Details > dim_store_details
+       - Product Details > dim_product_details
+       - Order Time Data > dim_date_times
 
 
 ## Milestore 3 - Creating Database Schema
