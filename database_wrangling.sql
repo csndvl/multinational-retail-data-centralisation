@@ -233,5 +233,15 @@ ALTER TABLE order_table
 ADD FOREIGN KEY (card_number)
 REFERENCES dim_card_details (card_number)
 
+/* Used to find the difference
+SELECT distinct(order_table.user_uuid)
+FROM order_table
+LEFT JOIN dim_user
+ON order_table.user_uuid = dim_user.user_uuid
+WHERE dim_user.user_uuid IS NULL'''
+*/
+
+
+
 
 
