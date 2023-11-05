@@ -5,7 +5,7 @@ import numpy as np
 
 
 class DataCleaning():
-    ''''''
+    '''This function cleans raw data.'''
 
     def clean_user_data(self, df):
         '''Cleans the legacy_user table'''
@@ -203,7 +203,6 @@ class DataCleaning():
         print ("cleaning order date done\n")
         return (df)
         
-
 
 
 
