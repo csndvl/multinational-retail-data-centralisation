@@ -232,18 +232,18 @@ if __name__ == "__main__":
     # clean_card_details = data_clean.clean_card_data(card_details)
 
     # # Store Details
-    number_of_stores_endpoint = os.getenv('number_of_stores_endpoint')
-    store_details_endpoint = os.getenv('store_details_endpoint')
-    api_key = {os.getenv('api_keyx') : os.getenv('api_keyy')}
+    # number_of_stores_endpoint = os.getenv('number_of_stores_endpoint')
+    # store_details_endpoint = os.getenv('store_details_endpoint')
+    # api_key = {os.getenv('api_keyx') : os.getenv('api_keyy')}
 
-    number_of_stores = data_ex.list_number_of_stores(number_of_stores_endpoint, api_key)
-    store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
-    clean_store = data_clean.clean_store_data(store_details)
+    # number_of_stores = data_ex.list_number_of_stores(number_of_stores_endpoint, api_key)
+    # store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
+    # clean_store = data_clean.clean_store_data(store_details)
 
     # # Product Details
-    # product_address = "s3://data-handling-public/products.csv"
-    # product_data = data_ex.extract_from_s3(product_address)
-    # clean_product = data_clean.clean_product_data(product_data)
+    product_address = os.getenv('product_address')
+    product_data = data_ex.extract_from_s3(product_address)
+    clean_product = data_clean.clean_product_data(product_data)
     
 
     # # Order Data
