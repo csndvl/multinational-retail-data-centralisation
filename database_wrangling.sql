@@ -231,7 +231,7 @@ REFERENCES dim_product (product_code);
 
 ALTER TABLE order_table
 ADD FOREIGN KEY (card_number)
-REFERENCES dim_card_details (card_number)
+REFERENCES dim_card_details (card_number);
 
 /* Used to find the difference
 SELECT distinct(order_table.user_uuid)
