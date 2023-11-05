@@ -218,48 +218,49 @@ if __name__ == "__main__":
     load_dotenv('.env')
 
     # Database credentials and Engine connection
-    aws_creds = db_con.read_db_creds()
-    engine = db_con.init_db_engine(aws_creds)
+    # aws_creds = db_con.read_db_creds()
+    engine = db_con.init_db_engine()
     local_creds = db_con.local_creds()
+    
 
-    # # RETRIEVES AND CLEAN DATA
-    # # User Data
-    # user_data = data_ex.read_rds_table(engine, "legacy_users")
-    # clean_user_data = data_clean.clean_user_data(user_data)
+    # RETRIEVES AND CLEAN DATA
+    # User Data
+    user_data = data_ex.read_rds_table(engine, "legacy_users")
+    clean_user_data = data_clean.clean_user_data(user_data)
 
-    # # Card Details
-    # card_details = data_ex.retrieve_pdf_data()
-    # clean_card_details = data_clean.clean_card_data(card_details)
+    # Card Details
+    card_details = data_ex.retrieve_pdf_data()
+    clean_card_details = data_clean.clean_card_data(card_details)
 
-    # # Store Details
-    # number_of_stores_endpoint = os.getenv('number_of_stores_endpoint')
-    # store_details_endpoint = os.getenv('store_details_endpoint')
-    # api_key = {os.getenv('api_keyx') : os.getenv('api_keyy')}
+    # Store Details
+    number_of_stores_endpoint = os.getenv('number_of_stores_endpoint')
+    store_details_endpoint = os.getenv('store_details_endpoint')
+    api_key = {os.getenv('api_keyx') : os.getenv('api_keyy')}
 
-    # number_of_stores = data_ex.list_number_of_stores(number_of_stores_endpoint, api_key)
-    # store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
-    # clean_store = data_clean.clean_store_data(store_details)
+    number_of_stores = data_ex.list_number_of_stores(number_of_stores_endpoint, api_key)
+    store_details =  data_ex.retrieve_stores_data(store_details_endpoint, number_of_stores, api_key)
+    clean_store = data_clean.clean_store_data(store_details)
 
-    # # Product Details
-    # product_address = os.getenv('product_address')
-    # product_data = data_ex.extract_from_s3(product_address)
-    # clean_product = data_clean.clean_product_data(product_data)    
+    # Product Details
+    product_address = os.getenv('product_address')
+    product_data = data_ex.extract_from_s3(product_address)
+    clean_product = data_clean.clean_product_data(product_data)    
 
-    # # Order Data
-    # order_data = data_ex.read_rds_table(engine, "orders_table")
-    # clean_order_data = data_clean.clean_orders_data(order_data)
+    # Order Data
+    order_data = data_ex.read_rds_table(engine, "orders_table")
+    clean_order_data = data_clean.clean_orders_data(order_data)
 
-    # # Order Time Data
+    # Order Time Data
     order_time_address = os.getenv('order_time_address')
     order_time_data = data_ex.extract_from_s3(order_time_address)
     clean_order_time_data = data_clean.clean_order_date(order_time_data)
     
-    # # UPLOAD TO LOCAL DATABASE
-    # db_con.upload_to_db(clean_user_data, 'dim_user', local_creds) # Upload user data
-    # db_con.upload_to_db(clean_card_details, 'dim_card_details', local_creds) # Upload card details
-    # db_con.upload_to_db(clean_store, 'dim_store_details', local_creds) # Upload card details
-    # db_con.upload_to_db(clean_product, 'dim_product', local_creds) # Upload product details
-    # db_con.upload_to_db(clean_order_data, 'order_table', local_creds) # Upload order data
-    # db_con.upload_to_db(clean_order_time_data, 'dim_date_times', local_creds) # Upload order date times data
+    # UPLOAD TO LOCAL DATABASE
+    db_con.upload_to_db(clean_user_data, 'dim_user', local_creds) # Upload user data
+    db_con.upload_to_db(clean_card_details, 'dim_card_details', local_creds) # Upload card details
+    db_con.upload_to_db(clean_store, 'dim_store_details', local_creds) # Upload card details
+    db_con.upload_to_db(clean_product, 'dim_product', local_creds) # Upload product details
+    db_con.upload_to_db(clean_order_data, 'order_table', local_creds) # Upload order data
+    db_con.upload_to_db(clean_order_time_data, 'dim_date_times', local_creds) # Upload order date times data
     
     
