@@ -42,3 +42,30 @@ JOIN dim_store_details
 ON dim_store_details.store_code = order_table.store_code
 GROUP BY location 
 ORDER BY number_of_sales ASC;
+
+
+--TASK 5: What percentage of sales come through each type of store
+
+SELECT dim_store_details.store_type, ROUND(SUM(dim_product.product_price * order_table.product_quantity)::NUMERIC,2) as total_sales, 
+ROUND(SUM(100 * dim_product.product_price * order_table.product_quantity)::NUMERIC/ SUM(SUM(dim_product.product_price * order_table.product_quantity)::NUMERIC) OVER (), 2) as "percentage_total(%)"
+FROM dim_product
+JOIN order_table
+ON order_table.product_code = dim_product.product_code
+JOIN dim_store_details
+ON dim_store_details.store_code = order_table.store_code
+GROUP BY dim_store_details.store_type
+ORDER BY "percentage_total(%)" DESC;
+
+
+--TASK 6: Which month in each year produced the highest cost of sales?
+
+SELECT ROUND(SUM(dim_product.product_price * order_table.product_quantity)::NUMERIC ,2) as total_sales,
+dim_date_times.year, dim_date_times.month
+FROM dim_product
+JOIN order_table
+ON order_table.product_code = dim_product.product_code
+JOIN dim_date_times
+ON dim_date_times.date_uuid = order_table.date_uuid
+GROUP BY dim_date_times.year, dim_date_times.month
+ORDER BY total_sales DESC
+LIMIT 10;
