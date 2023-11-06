@@ -11,7 +11,7 @@ class DataCleaning():
 
     def clean_user_data(self, df):
         '''Cleans the legacy_user table'''
-        
+
         # Remove null values
         df = df.replace("NULL", np.NaN)
         df = df.dropna(subset=['user_uuid'])#subset=['user_uuid'], how='any', axis=0) 
@@ -23,38 +23,8 @@ class DataCleaning():
        
         # Converts date_of_birth and join_date column into a datetime data type and any invalid data into Not a Time (NaT)
         df['date_of_birth'] = pd.to_datetime(df['date_of_birth'], errors = 'ignore') 
-
-        row_to_update = df[df['join_date'] == 'February 2019 03'].index[0]
-        df.at[row_to_update, 'join_date'] = '2019 February 03'
-        row_to_update = df[df['join_date'] == 'May 1994 27'].index[0]
-        df.at[row_to_update, 'join_date'] = '1994 May 27'
-        row_to_update = df[df['join_date'] == 'May 1999 31'].index[0]
-        df.at[row_to_update, 'join_date'] = '1999 May 31'
-        row_to_update = df[df['join_date'] == 'November 1994 28'].index[0]
-        df.at[row_to_update, 'join_date'] = '1994 November 28'
-        row_to_update = df[df['join_date'] == 'March 2011 04'].index[0]
-        df.at[row_to_update, 'join_date'] = '2011 March 04'
-        row_to_update = df[df['join_date'] == 'July 2002 21'].index[0]
-        df.at[row_to_update, 'join_date'] = '2002 July 21'
-        row_to_update = df[df['join_date'] == 'October 2022 26'].index[0]
-        df.at[row_to_update, 'join_date'] = '2022 October 26'
-        row_to_update = df[df['join_date'] == 'December 1992 09'].index[0]
-        df.at[row_to_update, 'join_date'] = '1992 December 09'
-
-        df['join_date'] = df['join_date'].str.replace('/', '-')
-        df['join_date'] = df['join_date'].str.replace('February', '2')
-        df['join_date'] = df['join_date'].str.replace('March', '3')
-        df['join_date'] = df['join_date'].str.replace('May', '5')
-        df['join_date'] = df['join_date'].str.replace('June', '6')
-        df['join_date'] = df['join_date'].str.replace('July', '7')
-        df['join_date'] = df['join_date'].str.replace('September', '9')
-        df['join_date'] = df['join_date'].str.replace('October', '10')
-        df['join_date'] = df['join_date'].str.replace('November', '11')
-        df['join_date'] = df['join_date'].str.replace('December', '12')
-        df['join_date'] = df['join_date'].str.replace(' ', '-')
-        #df['join_date'] = pd.to_datetime(df['join_date'], format="%Y-%B-%d", errors = 'ignore')
-
-        df['join_date'] = pd.to_datetime(df['join_date'], errors = 'coerce') 
+        df['join_date'] = df['join_date'].apply(pd.to_datetime, errors = 'coerce')
+        #df['join_date'] = pd.to_datetime(df['join_date'], errors = 'coerce') 
         df.dropna(subset = ['join_date'], inplace=True) # Drops all null values in join_date column
         
         # Company column cleaning
@@ -161,11 +131,7 @@ class DataCleaning():
         
         print ("running clean_product_data")
         # Convert date_added column into datetime
-        row_to_update = df[df['date_added'] == 'September 2017 06'].index[0]
-        df.at[row_to_update, 'date_added'] = '2017 9 06'
-        df['date_added'] = df['date_added'].str.replace("October", '10')
-        df['date_added'] = df['date_added'].str.replace(' ', '-')
-        df['date_added'] = pd.to_datetime(df['date_added'], errors = 'coerce')
+        df['date_added'] = df['date_added'].apply(pd.to_datetime, errors = 'coerce')
         df = df.dropna(subset = ["date_added"])
 
         # Removes null and reset index
@@ -221,7 +187,6 @@ if __name__ == "__main__":
     # aws_creds = db_con.read_db_creds()
     engine = db_con.init_db_engine()
     local_creds = db_con.local_creds()
-    
 
     # RETRIEVES AND CLEAN DATA
     # User Data
