@@ -13,6 +13,7 @@ Your first goal will be to produce a system that stores the current company data
   3. Uploading data into the database. We write DatabaseConnector class "database_utils.py", which initiates the database engine based on credentials provided in ".yml" file.
   4. Database wrangling is performed inside "database_wrangling.sql". This is where all the columns are converted into its correct data types, all the dim tables are given primary key, and also where foreign keys are added into order table
   5. Data queries are performed inside "scenario_queries.sql"
+  6. A .env file was created to store all sensitive data, making them secure and proctected.
 
 
 ## Milestone 2 - Data Extraction and Data Cleaning
