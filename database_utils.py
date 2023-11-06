@@ -15,17 +15,23 @@ class DatabaseConnector():
         self.RDS_DATABASE = os.getenv('RDS_DATABASE')
         self.RDS_PORT = os.getenv('RDS_PORT')
 
+        self.DB_HOST = os.getenv('DB_HOST')
+        self.DB_PASSWORD = os.getenv('DB_PASSWORD')
+        self.DB_USER = os.getenv('DB_USER')
+        self.DB_DATABASE = os.getenv('DB_DATABASE')
+        self.DB_PORT = os.getenv('DB_PORT')
+
     # def read_db_creds(self):
     #     '''Reads the AWS Database Credentials'''
     #     with open("db_creds.yaml", 'r') as f:
     #         db_creds = yaml.safe_load(f)
     #         return (db_creds)
             
-    def local_creds(self):
-        '''Reads the Local Database Credentials'''
-        with open("local_db_creds.yaml", 'r') as f:
-            local_db_creds = yaml.safe_load(f)
-            return local_db_creds
+    # def local_creds(self):
+    #     '''Reads the Local Database Credentials'''
+    #     with open("local_db_creds.yaml", 'r') as f:
+    #         local_db_creds = yaml.safe_load(f)
+    #         return local_db_creds
              
     def init_db_engine(self):
         '''Creates an instance of the Engine Class'''
@@ -40,9 +46,9 @@ class DatabaseConnector():
         inspector = inspect(connection)
         print (inspector.get_table_names()) # Prints tables names
 
-    def upload_to_db(self, df, table_name, local_creds):
+    def upload_to_db(self, df, table_name):
         '''Upload dataframe into local database'''
-        local_db_url = f'postgresql://{local_creds["DB_USER"]}:{local_creds["DB_PASSWORD"]}@{local_creds["DB_HOST"]}:{local_creds["DB_PORT"]}/{local_creds["DB_DATABASE"]}'
+        local_db_url = f'postgresql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_DATABASE}'
         local_engine = create_engine(local_db_url) # Create an engine
         local_connection = local_engine.connect() # Make a connection
         df.to_sql(table_name, local_connection, if_exists = 'replace') # Upload clean dataframe into local sales_data 

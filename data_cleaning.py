@@ -44,7 +44,6 @@ class DataCleaning():
         # Phone number cleaning 
         df['phone_number'] = df['phone_number'].str.replace(r"(\D)", "", regex = True) # Removes all non-digit
         df['phone_number'] = df['phone_number'].str.replace(" ", "") # Removes all white space
-        #MORE
 
         # Remove index column and replace with a new one
         df.reset_index(inplace = True)
@@ -185,9 +184,9 @@ if __name__ == "__main__":
 
     # Database credentials and Engine connection
     # aws_creds = db_con.read_db_creds()
+    # local_creds = db_con.local_creds()
     engine = db_con.init_db_engine()
-    local_creds = db_con.local_creds()
-
+    
     # RETRIEVES AND CLEAN DATA
     # User Data
     user_data = data_ex.read_rds_table(engine, "legacy_users")
@@ -221,11 +220,11 @@ if __name__ == "__main__":
     clean_order_time_data = data_clean.clean_order_date(order_time_data)
     
     # UPLOAD TO LOCAL DATABASE
-    db_con.upload_to_db(clean_user_data, 'dim_user', local_creds) # Upload user data
-    db_con.upload_to_db(clean_card_details, 'dim_card_details', local_creds) # Upload card details
-    db_con.upload_to_db(clean_store, 'dim_store_details', local_creds) # Upload card details
-    db_con.upload_to_db(clean_product, 'dim_product', local_creds) # Upload product details
-    db_con.upload_to_db(clean_order_data, 'order_table', local_creds) # Upload order data
-    db_con.upload_to_db(clean_order_time_data, 'dim_date_times', local_creds) # Upload order date times data
+    db_con.upload_to_db(clean_user_data, 'dim_user') # Upload user data
+    db_con.upload_to_db(clean_card_details, 'dim_card_details') # Upload card details
+    db_con.upload_to_db(clean_store, 'dim_store_details') # Upload card details
+    db_con.upload_to_db(clean_product, 'dim_product') # Upload product details
+    db_con.upload_to_db(clean_order_data, 'order_table') # Upload order data
+    db_con.upload_to_db(clean_order_time_data, 'dim_date_times') # Upload order date times data
     
     
